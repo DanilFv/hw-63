@@ -5,6 +5,7 @@ import {Route, Routes} from 'react-router-dom';
 import Home from './containers/Home/Home.tsx';
 import NewPost from './containers/NewPost/NewPost.tsx';
 import EditPost from './containers/EditPost/EditPost.tsx';
+import FullPost from './containers/FullPost/FullPost.tsx';
 
 const App = () => {
 
@@ -20,6 +21,7 @@ const App = () => {
                     <Route path="/posts" element={(<Home />)} />
 
                     <Route path="/new-post" element={(<NewPost />)} />
+                    <Route path="/posts/:id" element={(<FullPost />)} />
                     <Route path="/posts/:id/edit" element={(<EditPost />)} />
 
 

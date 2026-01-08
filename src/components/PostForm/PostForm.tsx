@@ -1,29 +1,54 @@
-import {
-    Button,
-    Grid,
-    TextareaAutosize,
-    TextField,
-    Typography
-} from '@mui/material';
+import {Button, Grid, TextField, Typography} from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
 import type {IPostForm} from '../../types';
 import {useForm} from 'react-hook-form';
+import * as React from 'react';
+import {useState} from 'react';
+import axiosAPI from '../../axiosAPI.ts';
+import {toast} from 'react-toastify';
+import {useNavigate} from 'react-router-dom';
 
 interface Props {
     isEdit?: boolean;
 }
 
 
-const PostForm: React.FC<Props> = ({isEdit = false}) => {
+
+
+const PostForm: React.FC<Props> = ({isEdit = false,}) => {
+    const [loading, setLoading] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     const {register, handleSubmit, reset, formState: {errors}} = useForm<IPostForm>({
         defaultValues: {
             title: '',
-            description: ''
+            description: '',
         }
     });
 
+    const onSubmit = async (data: IPostForm) => {
+
+
+        try {
+            setLoading(true);
+
+            if (isEdit) {
+
+            } else {
+                await axiosAPI.post('/posts.json', {...data, date: new Date().toISOString()});
+            }
+
+        } finally {
+            setLoading(false);
+        }
+
+        reset();
+        toast.success('Пост успешно добавлен!');
+        navigate('/');
+    }
+
     return (
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <Typography variant="h4" sx={{ textAlign: 'center' }}>
                 {isEdit ? 'Edit post' : 'Add post'}
             </Typography>
@@ -35,6 +60,7 @@ const PostForm: React.FC<Props> = ({isEdit = false}) => {
                         label="Post title"
                         sx={{ width:'100%' }}
                         variant="outlined"
+                        disabled={loading}
                          {...register('title', {
                             required: 'Обязательно к заполнению!',
                              minLength: {
@@ -49,11 +75,13 @@ const PostForm: React.FC<Props> = ({isEdit = false}) => {
 
 
                 <Grid size={12}>
-                    <TextareaAutosize
-                        aria-label="description"
+                    <TextField
+                        label="Description"
+                        multiline
                         minRows={3}
-                        placeholder='Minimum 3 rows'
-                        style={{ width: '100%', height: '100px' }}
+                        fullWidth
+                        variant="outlined"
+                        disabled={loading}
                          {...register('description', {
                             required: 'Обязательно к заполнению!',
                              minLength: {
@@ -67,7 +95,16 @@ const PostForm: React.FC<Props> = ({isEdit = false}) => {
                 </Grid>
 
                 <Grid size={12}>
-                    <Button type='submit' sx={{ width: '100%' }} variant='contained'>{isEdit ? 'Edit' : 'Add'}</Button>
+                    <Button
+                        type="submit"
+                        size="medium"
+                        endIcon={<SendIcon />}
+                        loading={loading}
+                        loadingPosition="end"
+                        variant="contained"
+                    >
+                        {isEdit ? 'Edit post' : 'Add post'}
+                    </Button>
                 </Grid>
             </Grid>
         </form>

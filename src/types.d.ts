@@ -4,11 +4,12 @@ export interface IPostForm {
 }
 
 export interface IPost {
-    id: string;
+    id?: string;
+    date: string;
     title: string;
-    description: string;
+    description?: string;
 }
 
 export interface IPostAPI {
-    [key: string]: IPostForm;
+    [key: string]: IPost;
 }
