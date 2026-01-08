@@ -2,6 +2,7 @@ import {Button, Card, CardContent, Typography} from '@mui/material';
 import * as React from 'react';
 import type {IPost} from '../../../types';
 import dayjs from 'dayjs';
+import {NavLink} from 'react-router-dom';
 
 interface Props {
    post: IPost;
@@ -18,7 +19,7 @@ const PostCard: React.FC<Props> = ({post}) => {
               <Typography variant="h5" component="h5" color="inherit" sx={{ mb: 2 }}>
                   {post.title}
               </Typography>
-                <Button variant="outlined" size='small'>Подробнее</Button>
+                <Button variant="outlined" size='small' component={NavLink} to={`/posts/${post.id}`}>Read more ...</Button>
             </CardContent>
         </Card>
     );
