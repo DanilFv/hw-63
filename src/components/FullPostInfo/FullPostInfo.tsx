@@ -4,12 +4,14 @@ import {Box, Button, Card, CardContent, Typography} from '@mui/material';
 import dayjs from 'dayjs';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
+import {NavLink} from 'react-router-dom';
 
 interface Props {
     post: IPost;
+    deleteButton: (id: string) => void;
 }
 
-const FullPostInfo: React.FC<Props> = ({post}) => {
+const FullPostInfo: React.FC<Props> = ({post, deleteButton}) => {
     return (
         <Box
             sx={{
@@ -32,8 +34,8 @@ const FullPostInfo: React.FC<Props> = ({post}) => {
                     </Typography>
 
                     <Box sx={{ display: 'flex', gap: 1 }}>
-                        <Button variant="outlined" size='small' endIcon={<EditIcon />}>Edit</Button>
-                        <Button variant="outlined" size='small' endIcon={<DeleteForeverIcon />}>Delete</Button>
+                        <Button type='button' variant="outlined" size='small' component={NavLink} to={`/posts/${post.id}/edit`} endIcon={<EditIcon />}>Edit</Button>
+                        <Button type='button' onClick={() => post.id && deleteButton(post.id)} variant="outlined" size='small' endIcon={<DeleteForeverIcon />}>Delete</Button>
                     </Box>
                 </CardContent>
         </Card>

@@ -6,6 +6,8 @@ import Home from './containers/Home/Home.tsx';
 import NewPost from './containers/NewPost/NewPost.tsx';
 import EditPost from './containers/EditPost/EditPost.tsx';
 import FullPost from './containers/FullPost/FullPost.tsx';
+import AboutUsPage from './containers/AboutUsPage/AboutUsPage.tsx';
+import ContactsPage from './containers/ContactsPage/ContactsPage.tsx';
 
 const App = () => {
 
@@ -24,6 +26,8 @@ const App = () => {
                     <Route path="/posts/:id" element={(<FullPost />)} />
                     <Route path="/posts/:id/edit" element={(<EditPost />)} />
 
+                    <Route path="/about" element={(<AboutUsPage />)} />
+                    <Route path="/contacts" element={(<ContactsPage />)} />
 
 
                     <Route

@@ -10,30 +10,27 @@ import {useNavigate} from 'react-router-dom';
 
 interface Props {
     isEdit?: boolean;
+    initialValuesForm?: IPostForm;
+    postId?: string | null;
 }
 
-
-
-
-const PostForm: React.FC<Props> = ({isEdit = false,}) => {
+const PostForm: React.FC<Props> = ({isEdit = false, postId, initialValuesForm = {
+    title: '',
+    description: '',
+}}) => {
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const {register, handleSubmit, reset, formState: {errors}} = useForm<IPostForm>({
-        defaultValues: {
-            title: '',
-            description: '',
-        }
+        defaultValues: initialValuesForm
     });
 
     const onSubmit = async (data: IPostForm) => {
-
-
         try {
             setLoading(true);
 
-            if (isEdit) {
-
+            if (isEdit && postId) {
+                await axiosAPI.put(`/posts/${postId}.json`, {...data, date: new Date().toISOString()});
             } else {
                 await axiosAPI.post('/posts.json', {...data, date: new Date().toISOString()});
             }
@@ -42,8 +39,8 @@ const PostForm: React.FC<Props> = ({isEdit = false,}) => {
             setLoading(false);
         }
 
+        toast.success(`Пост успешно ${isEdit ? 'изменен' : 'добавлен'}!`);
         reset();
-        toast.success('Пост успешно добавлен!');
         navigate('/');
     }
 
@@ -53,7 +50,7 @@ const PostForm: React.FC<Props> = ({isEdit = false,}) => {
                 {isEdit ? 'Edit post' : 'Add post'}
             </Typography>
 
-            <Grid container spacing={2} sx={{ mx: 'auto', width: '50%', mt: 4 }}>
+            <Grid container spacing={2} sx={{ mx: 'auto', width: '50%', mt: 4, mb: 4 }}>
                 <Grid size={12}>
                     <TextField
                         type="text"

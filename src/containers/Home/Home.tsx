@@ -23,7 +23,6 @@ const Home = () => {
                         id: idPost,
                     }
                 });
-
                 setPosts(allPosts);
             }
         } finally {
